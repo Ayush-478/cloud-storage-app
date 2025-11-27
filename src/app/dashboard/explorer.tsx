@@ -39,7 +39,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
     let eleArray = pathArray.map((e : any)=>{
       return(
         <>
-        <h4 className={ancestorsClass} data-name = {e} onClick = {(e) => {nav(e.target.dataset.name)}}>
+        <h4 className={ancestorsClass} data-name = {e} onClick = {(e) => {nav(e.target.dataset.name, null)}}>
           {e}
         </h4>)
       <Separator className="ml-[0.25rem]" orientation="vertical"></Separator></>
@@ -67,7 +67,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
     }
   return(<>
     <ArrowBigLeft size={34} className="mr-3 cursor-pointer" onClick = {()=> nav(null, true)} ></ArrowBigLeft>
-    <h4 className={ancestorsClass} onClick = {() => nav()}>
+    <h4 className={ancestorsClass} onClick = {() => nav(null,null)}>
       Home
     </h4>
     {eleArray}
