@@ -130,7 +130,7 @@ export default function AddNew({ setReload, relativePath} : ChildProps ){
   return(
     <>
       <Button onClick={()=>{if(uploadFile.current){uploadFile.current.click()}}} className="w-[98%] font-semibold" variant ="default" >Upload File</Button>
-      <input ref={uploadFile} type="file" onChange={(e)=>{handleFileUpload(e)}} className="hidden" variant="default" ></input>
+      <input ref={uploadFile} type="file" onChange={(e)=>{handleFileUpload(e)}} className="hidden"></input>
     <Button className="w-[98%] font-semibold" variant="default">
       <DropdownMenu>
         <DropdownMenuTrigger className= "" onClick = {handleNewFile}>New File</DropdownMenuTrigger>
