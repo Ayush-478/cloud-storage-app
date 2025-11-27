@@ -87,7 +87,7 @@ export default function AddNew({ setReload, relativePath} : ChildProps ){
     }
   }
 
-  async function handleFileUpload(e){
+  async function handleFileUpload(e : any){
     try{
       const file = e.target.files[0]
       const extension = file.name.split(".").pop().toLowerCase();
