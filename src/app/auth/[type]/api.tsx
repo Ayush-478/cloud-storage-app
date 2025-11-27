@@ -1,5 +1,15 @@
-export async function Authentication(formInfo, context){
-  let response
+// Define the shape of your form data
+interface FormInfo {
+  email: string;
+  password: string;
+  // add other fields if needed
+}
+
+// Restrict context to expected values
+type AuthContext = "Registration" | "Login";
+
+export async function Authentication(formInfo : FormInfo, context : AuthContext){
+  let response : any || null
   if(context == "Registration"){
     response = await fetch('https://localhost:5000/users/register',{
       method: "POST",
