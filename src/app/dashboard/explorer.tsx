@@ -36,7 +36,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
     const currentClass = "underline bg-rose-950 rounded-sm cursor-pointer sroll-m-20 text-2xl font-semibold pr-[0.4rem] pl-[0.4rem] tracking-tight"
     const pathArray = relativePath.split("/").filter(Boolean)
     const current = pathArray.pop()
-    let eleArray = pathArray.map((e)=>{
+    let eleArray = pathArray.map((e : any)=>{
       return(
         <>
         <h4 className={ancestorsClass} data-name = {e} onClick = {(e) => {nav(e.target.dataset.name)}}>
@@ -45,7 +45,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
       <Separator className="ml-[0.25rem]" orientation="vertical"></Separator></>
     )})
 
-    function nav(name, back){
+    function nav(name : string | null, back : string | null){
       if(back){
         let str = ""
         pathArray.forEach((e)=> {str = path.join(str, e)})
