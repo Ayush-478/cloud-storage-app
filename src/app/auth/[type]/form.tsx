@@ -5,7 +5,7 @@ import {useRef, useState} from 'react'
 import {Authentication} from './api'
 import { redirect, RedirectType } from 'next/navigation'
 
-export default function Form(props) {
+export default function Form(props : any) {
 
   const nameRef = useRef()
   const passRef = useRef()
