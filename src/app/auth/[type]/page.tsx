@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default async function Interface({params,}:{params : Promise<{ type : string}>}) {
 
-  let context = null as null | "Login" : "Register"
+  let context = null as null | "Login" | "Register"
   const type = (await params).type as "login" | "register"
   if(type == 'login'){
     context = "Login"
