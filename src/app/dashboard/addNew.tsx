@@ -12,9 +12,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-export default function AddNew({setReload, relativePath}){
 
-  const uploadFile = useRef(null) as any
+interface ChildProps{
+  setReload :  React.Dispatch<React.SetStateAction<boolean>>;
+  relativePath : string;
+}
+
+export default function AddNew({ setReload, relativePath} : ChildProps ){
+
+  const uploadFile = useRef(null)
 
   const getTypeJSON = {
     doc: {type: "docs"},
@@ -65,7 +71,7 @@ export default function AddNew({setReload, relativePath}){
   }
 
   async function handleNewFolder(){
-    const jwt = await getJWT() as string
+    const jwt = await getJWT()
     let response = await fetch("http://localhost:5000/crud/newfolder", {
     method : "POST",
     body: JSON.stringify({location : relativePath}),
@@ -75,7 +81,7 @@ export default function AddNew({setReload, relativePath}){
       "Accept" : "application/json"
     },
     credentials : "include",
-    }) as Response
+    })
     if (response.ok){
       setReload(true)
     }
