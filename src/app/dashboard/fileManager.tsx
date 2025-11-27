@@ -162,6 +162,9 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     let name = e.currentTarget.dataset.name
     let location = e.currentTarget.dataset.path
     //FIGURE OUT NAMING INCONSISTENCIES
+    if(!name || !location){
+      return
+    }
     if (name.indexOf(".") < 0){
       setRelativePath(e => path.join(e, location))
       setReload(true)
@@ -169,6 +172,9 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
   }
 
   async function handleOpenFile(location : string){
+    if(!location){
+      return
+    }
     let {image, bitmap} = await getImage(location)
     displayImage.current = <img src={image} width={bitmap.width} height={bitmap.height} className="z-5"></img>
     setDisplayMode(true)
@@ -176,6 +182,9 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
 
   async function getImage(location : string){
     //let res = await fetchImage(location)
+    if(!location){
+      return
+    }
     const { data : { user } } = await supabase.auth.getUser()
     const { data, error } = await supabase.storage.from('user-data').download(`${user.id}/${location}`)
     const bitmap = await createImageBitmap(data)
@@ -189,7 +198,10 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
   }
 
   function makeFolderElement(type : string, name : string, location : string, hidden : boolean){
-    let icon = null;
+    if(!type || !name || !location || !hidden){
+      return
+    }
+    let icon = null as string | null;
     Object.keys(getTypeIcon).forEach((key, i) => {
       if(key===type){
         icon = getTypeIcon[key].icon
@@ -211,7 +223,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className="text-red-600 font-bold " data-path = {location} onClick = {(e) => handleDelete(e)} >
+              <DropdownMenuItem className="text-red-600 font-bold " data-path = {location} onClick = {(e : React.MouseEvent<HTMLDivElement>) => handleDelete(e)} >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuItem>Billing</DropdownMenuItem>
@@ -225,7 +237,10 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
   )}
 
   async function makeFileElement(type : string, name : string, location : string){
-    let icon = null;
+    if(!type || !name || !location || !hidden){
+      return
+    }
+    let icon = null as null | string;
     let {image} = await getImage(location)
     Object.keys(getTypeIcon).forEach((key, i) => {
       if(key===type){
