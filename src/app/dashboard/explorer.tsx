@@ -1,6 +1,6 @@
 "use client"
 import path from 'path'
-import FileManager from './fileManager.tsx'
+import FileManager from './fileManager'
 import {
   Tooltip,
   TooltipContent,
@@ -18,11 +18,16 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { List, Table } from "lucide-react"
-import AddNew from './addNew.tsx'
+import AddNew from './addNew'
 import { useState } from 'react'
 import { ArrowBigLeft } from 'lucide-react'
 
-export default function Explorer( {query, setQuery}){
+interface ChildProps {
+  query : string;
+  setQuery : React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function Explorer( {query, setQuery} : ChildProps ){
   const [relativePath, setRelativePath] = useState("/")
   const [reload, setReload] = useState(true)
 
