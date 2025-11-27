@@ -1,5 +1,7 @@
 // Define the shape of your form data
 interface FormInfo {
+  username : string;
+  pass : string;
   email: string;
   password: string;
   // add other fields if needed
