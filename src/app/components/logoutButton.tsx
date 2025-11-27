@@ -1,6 +1,6 @@
 "use client";
 
-import Logout from '../logoutAction.tsx'
+import Logout from '../logoutAction'
 import Link from 'next/link'
 
 
