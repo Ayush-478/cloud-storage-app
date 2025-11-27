@@ -69,7 +69,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
       }
     }
   return(<>
-    <ArrowBigLeft size={34} className="mr-3 cursor-pointer" onClick = {()=> nav(null, true)} ></ArrowBigLeft>
+    <ArrowBigLeft size={34} className="mr-3 cursor-pointer" onClick = {()=> nav(null, "back")} ></ArrowBigLeft>
     <h4 className={ancestorsClass} onClick = {() => nav(null,null)}>
       Home
     </h4>
