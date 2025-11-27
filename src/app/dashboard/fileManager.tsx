@@ -62,13 +62,17 @@ interface ObjectProps{
   setQuery : React.Dispatch<React.SetStateAction<string>>;
 }
 
+interface FileItem{
+  [key : string] : any;
+}
+
 export default function FileManager({reload, setReload, relativePath, setRelativePath, query, setQuery} : ObjectProps){
   const [displayMode, setDisplayMode] = useState(false)
   const displayImage = useRef<HTMLImageElement | null>(null) 
-  const [allFiles, setAllFiles] = useState([])
-  const [renderedFiles, setRenderedFiles] = useState([])
+  const [allFiles, setAllFiles] = useState<FileItem[]>([])
+  const [renderedFiles, setRenderedFiles] = useState<FileItem[]>([])
   const [, offlineReload] = useState(0)
-  const [selectedArray, setSelectedArray] = useState([])
+  const [selectedArray, setSelectedArray] = useState<FileItem[]>([])
 
   useEffect(()=>{
     (async()=>{
