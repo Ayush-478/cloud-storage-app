@@ -1,7 +1,7 @@
 "use client"
-import getJWT from './getJWT.tsx'
+import getJWT from './getJWT'
 import Image from 'next/image'
-import fetchImage from './fetchImage.tsx'
+import fetchImage from './fetchImage'
 import { Button } from "@/components/ui/button"
 import path from 'path'
 import supabase from '../../config/supabase.js'
@@ -51,6 +51,15 @@ const getTypeIcon = {
   archive:{icon:archiveIcon},
   code:{icon:codeIcon},
   other:{icon:otherIcon}
+}
+
+interface ObjectProps{
+  reload : boolean;
+  setReload : React.Dispatch<React.SetStateAction<boolean>>;
+  relativePath : string;
+  setRelativePath : React.Dispatch<React.SetStateAction<string>>;
+  query : string;
+  setQuery : React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function FileManager({reload, setReload, relativePath, setRelativePath, query, setQuery}){
@@ -107,9 +116,8 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     )()
   },[allFiles, selectedArray])
   
-  async function handleDelete(e){
+  async function handleDelete(e : any){
     let location = e.target.dataset.path
-    console.log(location)
     let jwt = await getJWT()
     let response = await fetch(`http://localhost:5000/crud/`, {
     body: JSON.stringify({ location : location }),
@@ -125,14 +133,14 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     }
   }
 
-  function handleUnselect(e){
+  function handleUnselect(e : any){
     if (e.target.dataset.name == "FileManager"){
       setSelectedArray(p => [])
       offlineReload(e => e+1)
     }
   }
 
-  function handleSelected(e){
+  function handleSelected(e : any){
     let name = e.target.dataset.name
     let index = selectedArray.indexOf(name)
     if(index > -1){
@@ -143,7 +151,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     offlineReload(x => x+1)
   }
   
-  async function handledDoubleClick(e){
+  async function handledDoubleClick(e : any){
     let name = e.target.dataset.name
     let location = e.target.dataset.path
     //FIGURE OUT NAMING INCONSISTENCIES
@@ -153,13 +161,13 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     }else{handleOpenFile(location)}
   }
 
-  async function handleOpenFile(location){
+  async function handleOpenFile(location : string){
     let {image, bitmap} = await getImage(location)
     displayImage.current = <img src={image} width={bitmap.width} height={bitmap.height} className="z-5"></img>
     setDisplayMode(true)
   }
 
-  async function getImage(location){
+  async function getImage(location : string){
     //let res = await fetchImage(location)
     const { data : { user } } = await supabase.auth.getUser()
     const { data, error } = await supabase.storage.from('user-data').download(`${user.id}/${location}`)
@@ -173,7 +181,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     displayImage.current = null
   }
 
-  function makeFolderElement(type, name, location, hidden){
+  function makeFolderElement(type : string, name : string, location : string, hidden : boolean){
     let icon = null;
     Object.keys(getTypeIcon).forEach((key, i) => {
       if(key===type){
@@ -209,7 +217,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
       </div>
   )}
 
-  async function makeFileElement(type, name, location){
+  async function makeFileElement(type : string, name : string, location : string){
     let icon = null;
     let {image} = await getImage(location)
     Object.keys(getTypeIcon).forEach((key, i) => {
