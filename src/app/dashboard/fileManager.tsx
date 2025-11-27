@@ -111,7 +111,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
           if (file.type === "folder") {
             files.push(makeFolderElement(file.type, file.name, file.path, false));
           } else {
-            files.push(await makeFileElement(file.type, file.name, file.path, false));
+            files.push(await makeFileElement(file.type, file.name, file.path));
           }
         }
       }
