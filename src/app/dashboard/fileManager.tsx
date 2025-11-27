@@ -72,7 +72,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
   const [allFiles, setAllFiles] = useState<FileItem[]>([])
   const [renderedFiles, setRenderedFiles] = useState<FileItem[]>([])
   const [, offlineReload] = useState(0)
-  const [selectedArray, setSelectedArray] = useState<string>([])
+  const [selectedArray, setSelectedArray] = useState<FileItem[]>([])
 
   useEffect(()=>{
     (async()=>{
@@ -146,6 +146,9 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
 
   function handleSelected(e : React.MouseEvent<HTMLDivElement>){
     let name = e.currentTarget.dataset.name
+    if(!name){
+      return
+    }
     let index = selectedArray.indexOf(name)
     if(index > -1){
       setSelectedArray(p => p.filter((e,i) => i != index))
