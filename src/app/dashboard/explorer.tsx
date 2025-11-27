@@ -39,7 +39,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
     let eleArray = pathArray.map((e : any)=>{
       return(
         <>
-        <h4 className={ancestorsClass} data-name = {e} onClick = {(e) => {nav(e.target.dataset.name, null)}}>
+        <h4 className={ancestorsClass} data-name = {e} onClick = {(e : React.MouseEvent<HTMLHeadingElement>) => {nav(e.target.dataset.name, null)}}>
           {e}
         </h4>)
       <Separator className="ml-[0.25rem]" orientation="vertical"></Separator></>
@@ -48,7 +48,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
     function nav(name : string | null, back : string | null){
       if(back){
         let str = ""
-        pathArray.forEach((e)=> {str = path.join(str, e)})
+        pathArray.forEach((e : string)=> {str = path.join(str, e)})
         setRelativePath(str)
         setReload(true)
         return
@@ -56,7 +56,7 @@ export default function Explorer( {query, setQuery} : ChildProps ){
       if(name){
         let index = pathArray.indexOf(name)
         pathArray.splice(index+1)
-        pathArray.forEach((e)=> {str = path.join(str, e)})
+        pathArray.forEach((e : string)=> {str = path.join(str, e)})
         setRelativePath(str)
         setReload(true)
       }
