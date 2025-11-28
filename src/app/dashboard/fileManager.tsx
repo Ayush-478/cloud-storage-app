@@ -68,7 +68,7 @@ interface FileItem{
 
 export default function FileManager({reload, setReload, relativePath, setRelativePath, query, setQuery} : ObjectProps){
   const [displayMode, setDisplayMode] = useState(false)
-  const [displayImageProps, setDisplayImageProps] = useState<{[key<string>] : any}>({})
+  const [displayImageProps, setDisplayImageProps] = useState<{[key : string] : any}>({})
   const [allFiles, setAllFiles] = useState<FileItem[]>([])
   const [renderedFiles, setRenderedFiles] = useState<(JSX.Element | undefined)[]>([])
   const [, offlineReload] = useState(0)
