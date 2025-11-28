@@ -120,7 +120,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     )()
   },[allFiles, selectedArray])
   
-  async function handleDelete(e : React.MouseEvent<HTMLButtonElement>){
+  async function handleDelete(e : React.MouseEvent<HTMLDivElement>){
     let location = e.currentTarget.dataset.path
     let jwt = await getJWT()
     let response = await fetch(`http://localhost:5000/crud/`, {
@@ -214,7 +214,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
       <Card className = {selectedArray.includes(name) ? "Card bg-blue-700" : "Card"} >
         <CardHeader className="CardHeader">
           <div>
-            <Image src={icon} alt={"someimagehere"} style={{height:"1.6rem"},{width:"1.6rem"}} ></Image>
+            <Image src={icon} alt={"someimagehere"} style={{height:"1.6rem",width:"1.6rem"}} ></Image>
             <h4>{name}</h4>
           </div>
           <DropdownMenu>
@@ -245,13 +245,15 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     if (type in getTypeIcon) {
       icon = getTypeIcon[type as keyof typeof getTypeIcon].icon;
     }
-    let {image} = await getImage(location)
+    let obj = await getImage(location)
+    if(!obj){return}
+    let {image, bitmap} = obj
     return(
       <div className = "TRANSPARENT-COVER rounded-sm hover:brightness-120" data-name = {name} data-path = {location} onDoubleClick= {(e) => {handledDoubleClick(e)}} onClick = {(e) => handleSelected(e)} >
       <Card className = {selectedArray.includes(name) ? "Card bg-blue-700" : "Card items-center gap-0"} >
         <CardHeader className="CardHeader">
           <div>
-            <Image src={icon}  alt={"someimagehere"} style={{height:"1.6rem"},{width:"1.6rem"}} ></Image>
+            <Image src={icon}  alt={"someimagehere"} style={{height:"1.6rem",width:"1.6rem"}} ></Image>
             <h4>{name}</h4>
           </div>
           <DropdownMenu>
@@ -261,7 +263,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className="text-red-600 font-bold " data-path = {location} onClick = {(e) => handleDelete(e)} >
+              <DropdownMenuItem className="text-red-600 font-bold " data-path = {location} onClick = {(e : React.MouseEvent<HTMLDivElement>) => handleDelete(e)} >
                 Delete
               </DropdownMenuItem>
               <DropdownMenuItem>Billing</DropdownMenuItem>

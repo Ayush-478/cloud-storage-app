@@ -7,7 +7,14 @@ import { redirect, RedirectType } from 'next/navigation'
 import logo from './../../public/logo.svg'
 import { useRef,useState,useEffect } from 'react'
 
-export default function Landing({setAuth, blurClass, userInfo, setUserInfo}) {
+interface ObjectProps{
+  setAuth : React.Dispatch<React.SetStateAction<string|boolean>>;
+  blurClass : string;
+  userInfo : {[key : string] : any};
+  setUserInfo : React.Dispatch<React.SetStateAction<any>>;
+}
+
+export default function Landing({setAuth, blurClass, userInfo, setUserInfo} : ObjectProps) {
 
   const hover = useRef(false)
   const [hoverClass, setHoverClass] = useState(false)
@@ -32,7 +39,7 @@ export default function Landing({setAuth, blurClass, userInfo, setUserInfo}) {
 
   async function handleLogout(){
     const { error } = await supabase.auth.signOut()
-    setUserInfo({loggedIn : false, id : null})
+    setUserInfo(() => ({loggedIn : false, id : null}))
   }
 
   return (
@@ -40,7 +47,7 @@ export default function Landing({setAuth, blurClass, userInfo, setUserInfo}) {
     <div className="PAGE-1 h-screen w-screen">
       <div className="dash flex flex-row bg-black h-[11%] w-screen border-b-1 border-zinc-700 drop-shadow-[0_5px_20px_rgba(0,0,0,0.8)]">
         <div className="flex w-[12%] mr-[8%] pb-[0.8%] h-full items-center justify-center">
-          <Image src = {logo} style={{height: "3rem"},{width:"3rem"}} ></Image>
+          <Image src = {logo} alt={"image"} style={{height: "3rem",width:"3rem"}} ></Image>
           <h5 className="text-slate-100 text-2xl font-bold"> Raft</h5>
         </div>
         <div className="flex w-[48%] ml-auto mr-auto items-center justify-center">

@@ -1,19 +1,18 @@
 "use client"
 import { Input } from "@/components/ui/input"
-import getJWT from './dashboard/getJWT.tsx'
+import getJWT from './dashboard/getJWT'
 import { redirect, RedirectType } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import Landing from './landing.tsx'
-import validator from 'validator'
+import Landing from './landing'
 import { useState,useRef,useEffect } from 'react'
 import supabase from '../config/supabase.js'
 
 export default function Home() {
-  const [auth, setAuth] = useState(false)
-  const [userInfo, setUserInfo] = useState({loggedIn : false, id : null})
-  const email = useRef(null)
-  const password = useRef(null)
-  const formInfo = useRef(null)
+  const [auth, setAuth] = useState<string|boolean>(false)
+  const [userInfo, setUserInfo] = useState<{[key : string]:any}>({loggedIn : false, id : null})
+  const email = useRef<HTMLInputElement|null>(null)
+  const password = useRef<HTMLInputElement|null>(null)
+  const formInfo = useRef<HTMLDivElement|null>(null)
   const blurClass = "transition-color duration-1500 hover:bg-black/60 !block"
   const formClass = "absolute inset-0 m-auto flex items-center justify-center top-[-5%] bg-neutral-900 h-[35vh] w-[27vw] scale-100 transition-transform rounded-3xl duration-300 "
 
@@ -28,7 +27,13 @@ export default function Home() {
   },[])
   
   function isValid(){
-    if(validator.isEmail(email.current.value)){
+    if(!email.current || !formInfo.current){return false}
+    const validateEmail = (email : string) => {
+      if(!email){return}
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(email);
+    };
+    if(validateEmail(email.current.value)){
       return true
     }else{
       formInfo.current.textContent = "Not an Email"
@@ -42,59 +47,64 @@ export default function Home() {
   }
 
   async function submitForm(){      //HANDLE FORM VALIDATION
-    let error = null
-    //let response = await Authentication({username : username.current.value, pass : password.current.value}, auth)
-    if(auth == "Registration"){
-      formInfo.current.textContent="Adding User, Please wait.."
-      const { data, error } = await supabase.auth.signUp({
-        email: email.current.value,
-        password: password.current.value,
-      })
-      if(!error){
-        redirect('../dashboard/', RedirectType.push)
-      }
-    }else if(auth == "Login"){
-      formInfo.current.textContent="Logging User, Please wait.."
-      const { user, session, error } = await supabase.auth.signInWithPassword({
-        email: email.current.value,
-        password: password.current.value,
-      })
-      if(!error){
-        const { data : { user } } = await supabase.auth.getUser()
-        setUserInfo({loggedIn : true, id : user.id})
-        if(user && user.email_confirmed_at){
-          const jwt = await getJWT()
-          let res = await fetch('http://localhost:5000/users/login',{
-            method : "GET",
-            headers: {
-              "Authorization" : `Bearer ${jwt}`,
-              "Content-Type" : "application/json",
-              "Accept" : "application/json"
-            },
-          })
-          let cat = await fetch(`http://localhost:5000/users/cat`,{
-            method : "GET",
-            headers: {
-              "Authorization" : `Bearer ${jwt}`,
-            },
-            credentials : "include",
-          })
-          if(cat.status == 200){
-            const blob = await res.blob()
-            const { data, error } = await supabase.storage.from('user-data').upload(`${user.id}/cat.jpg`, blob, {upsert : false})
-            if(error){console.log(error)}
-          }
-          if(res.status == 200){
-            redirect('../dashboard/', RedirectType.push)
-          }else{
-            formInfo.current.textContent = await res.text()
+    if(!formInfo.current || !email.current || !password.current){return}
+    let error : any|null = null
+    try{
+      //let response = await Authentication({username : username.current.value, pass : password.current.value}, auth)
+      if(auth == "Registration"){
+        formInfo.current.textContent="Adding User, Please wait.."
+        const { data, error } = await supabase.auth.signUp({
+          email: email.current.value,
+          password: password.current.value,
+        })
+        if(!error){
+          redirect('../dashboard/', RedirectType.push)
+        }
+      }else if(auth == "Login"){
+        formInfo.current.textContent="Logging User, Please wait.."
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email.current.value,
+          password: password.current.value,
+        })
+        var user = data.user
+        if(!error){
+          const { data : { user } } = await supabase.auth.getUser()
+          if(!user){throw new Error("no user found type beat, unsuccessfulll")}
+          setUserInfo({loggedIn : true, id : user.id})
+          if(user && user.email_confirmed_at){
+            const jwt = await getJWT()
+            let res = await fetch('http://localhost:5000/users/login',{
+              method : "GET",
+              headers: {
+                "Authorization" : `Bearer ${jwt}`,
+                "Content-Type" : "application/json",
+                "Accept" : "application/json"
+              },
+            })
+            let cat = await fetch(`http://localhost:5000/users/cat`,{
+              method : "GET",
+              headers: {
+                "Authorization" : `Bearer ${jwt}`,
+              },
+              credentials : "include",
+            })
+            if(cat.status == 200){
+              const blob = await res.blob()
+              const { data, error } = await supabase.storage.from('user-data').upload(`${user.id}/cat.jpg`, blob, {upsert : false})
+              if(error){console.log(error)}
+            }
+            if(res.status == 200){
+              redirect('../dashboard/', RedirectType.push)
+            }else{
+              formInfo.current.textContent = await res.text()
+            }
           }
         }
       }
-    }
-    if(error){
-      formInfo.current.textContent= error
-    }
+      if(error){
+        throw new Error(error.message || "Unknown error")
+      }
+    }catch(err : any){formInfo.current.textContent = err.message}
   }
 
   return(

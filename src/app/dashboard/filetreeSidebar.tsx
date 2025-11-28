@@ -32,7 +32,7 @@ const sampleJson = {
 
 export default function FileTree() {
 
-  const [listItems, setListItems] = useState<string[]>([])
+  const [listItems, setListItems] = useState<any[]>([])
   const fileJson = useRef<{[key : string] : any}>({})
 
   useEffect(()=>{
@@ -51,8 +51,8 @@ export default function FileTree() {
       return
     }
     return(
-      <button key={i} data-index={name} onClick={swtichExpand} className="bg-muted flex relative rounded px-[0.3rem] py-[0.2rem] mb-[0.3rem] font-mono text-sm font-semibold hover:underline">
-        <Image src={folderIcon} style={{height: "1rem"},{width: "1rem"}} className="mr-2" ></Image>
+      <button key={i} data-index={name} onClick={switchExpand} className="bg-muted flex relative rounded px-[0.3rem] py-[0.2rem] mb-[0.3rem] font-mono text-sm font-semibold hover:underline">
+        <Image src={folderIcon} alt={'image'} style={{height: "1rem",width: "1rem"}} className="mr-2" ></Image>
         {name}
       </button>
     )
@@ -69,8 +69,9 @@ export default function FileTree() {
     )
   }
 
-  function switchExpand(ev : React.MouseEvent<HTMLDivElement>){
+  function switchExpand(ev : React.MouseEvent<HTMLElement>){
     let index = ev.currentTarget.dataset.index
+    if(!index){return}
     if(fileJson.current[index].expand){
       fileJson.current[index].expand = false
     }else{
@@ -80,12 +81,12 @@ export default function FileTree() {
   }
 
   function renderTree(treeJson : any) {
-    let skip = [];
+    let skip : string[] = [];
     setListItems([])
     function skipSubDirectories(root : string){
       if(treeJson[root].isFolder && treeJson[root]?.children?.length){
         if(treeJson[root].children && (treeJson[root].children).length > 0){
-          treeJson[root].children.forEach((item)=> skipSubDirectories(item))
+          treeJson[root].children.forEach((item : string)=> skipSubDirectories(item))
         }
       }
       skip.push(root)

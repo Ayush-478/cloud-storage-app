@@ -20,7 +20,7 @@ export default function NavMenu({query, setQuery} : ObjectProps){
     <div className="w-[100%] h-[9%] flex">
         <div className="LOGO h-[100%] w-[18%] flex items-center justify-start pl-[1.4%]">
           <Link href="/">
-            <Image src={logo} style={{height: "3.2rem"},{width:"3.2rem"}} ></Image>
+            <Image src={logo} alt={"image"} style={{height: "3.2rem",width:"3.2rem"}} ></Image>
           </Link>
         </div>
       <div className="h-[100%] w-[64%] flex items-center justify-center">
