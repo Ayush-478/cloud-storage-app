@@ -205,7 +205,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     if(!type || !name || !location){
       return
     }
-    let icon : string | null = null;
+    let icon : string = "otherIcon";
     if (type in getTypeIcon) {
       icon = getTypeIcon[type as keyof typeof getTypeIcon].icon;
     }
@@ -241,7 +241,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     if(!type || !name || !location){
       return
     }
-    let icon : string | null = null;
+    let icon : string = "otherIcon";
     if (type in getTypeIcon) {
       icon = getTypeIcon[type as keyof typeof getTypeIcon].icon;
     }
