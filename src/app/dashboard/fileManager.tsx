@@ -68,7 +68,7 @@ interface FileItem{
 
 export default function FileManager({reload, setReload, relativePath, setRelativePath, query, setQuery} : ObjectProps){
   const [displayMode, setDisplayMode] = useState(false)
-  const displayImage = useRef<HTMLImageElement | null>(null) 
+  const [displayImageProps, setDisplayImageProps] = useState<{[key<string>] : any}>({})
   const [allFiles, setAllFiles] = useState<FileItem[]>([])
   const [renderedFiles, setRenderedFiles] = useState<(JSX.Element | undefined)[]>([])
   const [, offlineReload] = useState(0)
@@ -178,7 +178,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     let obj = await getImage(location)
     if(!obj){return}
     let {image, bitmap} = obj
-    displayImage.current = <img src={image} width={bitmap.width} height={bitmap.height} className="z-5"></img>
+    setDisplayImageProps(p => ({src : image, width : bitmap.width height : bitmap.height}))
     setDisplayMode(true)
   }
 
@@ -196,7 +196,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
   
   function closeDisplayMode(){
     setDisplayMode(false)
-    displayImage.current = null
+    setDisplayImageProps(p => ({}))
   }
 
   function makeFolderElement(type : string, name : string, location : string, hidden : boolean){
@@ -282,7 +282,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
   return(
   <>
     <div className = {displayMode ? displayModeClass : "hidden"} onClick = {closeDisplayMode}>
-        {displayImage.current}
+        {<img src={displayImageProps.src} width={displayImageProps.width} height={displayImageProps.height} className="z-5"></img>}
     </div>
     <div className="FileManager" data-name = {"FileManager"} onClick={(e) => handleUnselect(e)}>
     {/*
