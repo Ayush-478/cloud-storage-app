@@ -178,7 +178,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     let obj = await getImage(location)
     if(!obj){return}
     let {image, bitmap} = obj
-    setDisplayImageProps(p => ({src : image, width : bitmap.width height : bitmap.height}))
+    setDisplayImageProps(p => ({src : image, width : bitmap.width, height : bitmap.height}))
     setDisplayMode(true)
   }
 
