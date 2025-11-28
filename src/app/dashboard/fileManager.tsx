@@ -205,7 +205,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     if(!type || !name || !location || !hidden){
       return
     }
-    let icon : {[key:string]:any} | string | null = null;
+    let icon : keyof typeof getTypeIcon | null = null;
     Object.keys(getTypeIcon).forEach((key, i) => {
       if(key===type){
         icon = getTypeIcon[key].icon
@@ -244,7 +244,7 @@ export default function FileManager({reload, setReload, relativePath, setRelativ
     if(!type || !name || !location || !hidden){
       return
     }
-    let icon : {[key:string]:any} | string | null = null;
+    let icon : keyof typeof getTypeIcon | null = null;
     let {image} = await getImage(location)
     Object.keys(getTypeIcon).forEach((key, i) => {
       if(key===type){
