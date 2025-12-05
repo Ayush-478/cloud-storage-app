@@ -23,7 +23,7 @@ export default function Home() {
     (async()=>{
       let welcome = await fetch(`https://server-for-online-database.onrender.com/users`)
       if(welcome && welcome.status == 200){
-        let d = await welcome.json()
+        let d = await welcome.text()
         console.log(d)
       }else{
         console.log("Render server not working!!")
