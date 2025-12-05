@@ -21,6 +21,11 @@ export default function Home() {
   //CHECKING IF LOGGED IN
   useEffect(()=>{
     (async()=>{
+      let welcome = await fetch(`https://server-for-online-database.onrender.com/users`)
+      if(welcome && welcome.status == 200){
+        let d = await welcome.json()
+        console.log(d)
+      }
       const { data : { user } } = await supabase.auth.getUser()
       if(user){
         setUserInfo({loggedIn : true, id : user.id})
