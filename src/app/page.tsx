@@ -25,6 +25,8 @@ export default function Home() {
       if(welcome && welcome.status == 200){
         let d = await welcome.json()
         console.log(d)
+      }else{
+        console.log("Render server not working!!")
       }
       const { data : { user } } = await supabase.auth.getUser()
       if(user){
