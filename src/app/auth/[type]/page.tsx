@@ -1,4 +1,4 @@
-
+"use client"
 import "../../globals.css";
 import Form from "./form";
 import Link from "next/link";
